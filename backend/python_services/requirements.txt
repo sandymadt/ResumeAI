@@ -1,0 +1,19 @@
+# Resume Text Extraction Module - Dependencies
+# Install with: pip install -r requirements.txt
+
+# PDF extraction - deterministic, table-aware PDF parser
+pdfplumber==0.11.0
+
+# DOCX extraction - converts DOCX to clean text
+mammoth==1.7.1
+
+# NLP for resume structuring
+spacy==3.7.2
+
+# Skill matching - semantic similarity
+sentence-transformers==2.2.2
+numpy==1.24.3
+
+# Optional: For better text processing (recommended)
+# python-magic==0.4.27  # File type detection
+# chardet==5.2.0  # Character encoding detection
