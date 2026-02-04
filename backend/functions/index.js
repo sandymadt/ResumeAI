@@ -40,10 +40,7 @@ exports.analyzeResume = onCall(
         // Resource allocation
         timeoutSeconds: 300, // 5 minutes max
         memory: '512MiB',
-        
-        // Security
-        secrets: ['OPENAI_API_KEY'], // Access secret from Google Cloud Secret Manager
-        
+
         // Region (optional - defaults to us-central1)
         // region: 'us-central1',
     },
