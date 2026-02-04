@@ -32,6 +32,13 @@ Main Exports:
 # PRIMARY API - Use these for black-box operation
 # ============================================================================
 
+# 🔥 NEW: Unified Model (Recommended)
+from .unified_model import (
+    UnifiedResumeAnalyzer,
+    analyze_resume as unified_analyze_resume
+)
+
+# Legacy: Original AI Engine (Still supported)
 from .ai_engine import (
     analyze_resume,
     ResumeAnalysisEngine
@@ -89,8 +96,13 @@ __all__ = [
     # ========================================================================
     # PRIMARY API - Recommended for most use cases
     # ========================================================================
-    'analyze_resume',          # 🔥 ONE-CALL API - Use this!
-    'ResumeAnalysisEngine',    # Orchestration engine
+    # 🔥 NEW: Unified Model (Simplest and most powerful)
+    'UnifiedResumeAnalyzer',      # 🔥 NEW! Single class for everything
+    'unified_analyze_resume',     # 🔥 NEW! One-call convenience function
+    
+    # Legacy: Original AI Engine (Still supported)
+    'analyze_resume',             # Original one-call API
+    'ResumeAnalysisEngine',       # Original orchestration engine
     
     # ========================================================================
     # Individual modules - For advanced workflows

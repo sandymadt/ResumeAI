@@ -5,12 +5,14 @@
  */
 
 const { HttpsError } = require('firebase-functions/v2/https');
+const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 
 /**
  * Main handler function
  */
 async function analyzeResumeHandler(request) {
-    console.log('🚀 analyzeResume called (MOCK MODE)');
+    const db = getFirestore();
+    console.log('🚀 analyzeResume called');
 
     // ============================================
     // 1. AUTHENTICATION CHECK
@@ -49,67 +51,130 @@ async function analyzeResumeHandler(request) {
     await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
 
     // ============================================
-    // 4. RETURN MOCK ANALYSIS RESULTS
+    // 4. DYNAMIC ATS CALCULATION (Improved Mock)
     // ============================================
-    const mockResult = {
-        atsScore: 72,
-        requiredKeywords: [
-            'JavaScript', 'React', 'Node.js', 'TypeScript',
-            'REST API', 'Git', 'Agile', 'Problem Solving',
-            'Team Collaboration', 'CI/CD'
-        ],
-        matchedKeywords: [
-            'JavaScript', 'React', 'Node.js', 'Git',
-            'Team Collaboration', 'Problem Solving'
-        ],
-        missingKeywords: [
-            'TypeScript', 'REST API', 'Agile', 'CI/CD'
-        ],
-        weakKeywords: [
-            'Node.js', 'Git'
-        ],
+    console.log('🤖 Calculating dynamic ATS score...');
+
+    // A simple list of common tech keywords to look for if JD is generic
+    const commonTechKeywords = [
+        'JavaScript', 'React', 'Node.js', 'Python', 'Java', 'SQL', 'Git',
+        'Cloud', 'AWS', 'Docker', 'Kubernetes', 'TypeScript', 'HTML', 'CSS',
+        'Agile', 'DevOps', 'CI/CD', 'API', 'REST', 'GraphQL', 'Machine Learning'
+    ];
+
+    // Extract potential keywords from JD (simple words > 4 chars)
+    const jdWords = jobDescription.toLowerCase().match(/\b\w{4,}\b/g) || [];
+    const resumeWords = resumeText.toLowerCase().match(/\b\w{4,}\b/g) || [];
+    const resumeFullText = resumeText.toLowerCase();
+
+    // Find matches
+    const potentialKeywords = Array.from(new Set([...jdWords.filter(w => commonTechKeywords.map(k => k.toLowerCase()).includes(w))]));
+    const matchedKeywords = potentialKeywords.filter(kw => resumeWords.includes(kw));
+    const missingKeywords = potentialKeywords.filter(kw => !resumeWords.includes(kw));
+
+    // Section Scoring
+    const sections = {
+        experience: ['experience', 'work history', 'employment'],
+        skills: ['skills', 'technologies', 'competencies'],
+        education: ['education', 'academic', 'degree'],
+        projects: ['projects', 'portfolio']
+    };
+
+    const sectionScores = {
+        experience: sections.experience.some(s => resumeFullText.includes(s)) ? 25 : 5,
+        skills: sections.skills.some(s => resumeFullText.includes(s)) ? 35 : 10,
+        projects: sections.projects.some(s => resumeFullText.includes(s)) ? 18 : 5,
+        roleAlignment: matchedKeywords.length > 5 ? 10 : 5
+    };
+
+    // Calculate Final ATS Score (0-100)
+    // Weights: Keywords (40%), Sections (60%)
+    const keywordScore = potentialKeywords.length > 0
+        ? (matchedKeywords.length / potentialKeywords.length) * 40
+        : 20;
+
+    const baseSectionScore = (sectionScores.experience + sectionScores.skills + sectionScores.projects + sectionScores.roleAlignment);
+    const finalAtsScore = Math.min(Math.round(keywordScore + (baseSectionScore * 0.6)), 98);
+
+    const dynamicResult = {
+        atsScore: finalAtsScore,
+        requiredKeywords: potentialKeywords.map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+        matchedKeywords: matchedKeywords.map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+        missingKeywords: missingKeywords.map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+        weakKeywords: missingKeywords.slice(0, 2).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
         sectionScores: {
-            skills: 28,        // out of 40
-            experience: 22,    // out of 30
-            projects: 14,      // out of 20
-            roleAlignment: 8   // out of 10
+            skills: Math.round(sectionScores.skills * (finalAtsScore / 100)),
+            experience: Math.round(sectionScores.experience * (finalAtsScore / 100)),
+            projects: Math.round(sectionScores.projects * (finalAtsScore / 100)),
+            roleAlignment: sectionScores.roleAlignment
         },
         improvementSuggestions: [
-            'Add TypeScript to your skill set - it\'s mentioned as a requirement in the job description',
-            'Include specific examples of REST API development in your experience section',
-            'Mention your experience with Agile methodologies and sprint planning',
-            'Add details about CI/CD pipeline setup or usage (GitHub Actions, Jenkins, etc.)',
-            'Quantify your Node.js achievements with metrics (e.g., "Improved API response time by 40%")',
-            'Strengthen your Git experience by mentioning branching strategies or code review practices',
-            'Add a projects section showcasing TypeScript-based applications',
-            'Include keywords like "scalable", "performance optimization", and "best practices"'
+            `Increase your score by adding these missing keywords: ${missingKeywords.slice(0, 3).join(', ')}`,
+            sectionScores.experience < 20 ? 'Your experience section seems weak or missing. Add more professional history.' : 'Strengthen your experience with more quantifiable metrics.',
+            sectionScores.projects < 10 ? 'Add a "Projects" section to showcase practical applications of your skills.' : 'Good use of projects to demonstrate competency.',
+            'Ensure your contact information is at the very top for better parsing.'
         ],
         optimizedBullets: [
-            'Architected and deployed 5+ production-ready React applications serving 50K+ monthly active users',
-            'Developed RESTful APIs using Node.js and Express, reducing server response time by 35%',
-            'Collaborated with cross-functional teams in Agile sprints to deliver features 20% faster',
-            'Implemented CI/CD pipelines using GitHub Actions, automating deployment and reducing errors by 60%',
-            'Migrated legacy JavaScript codebase to TypeScript, improving code maintainability and reducing bugs by 40%',
-            'Led code reviews and established Git workflow best practices for a team of 8 developers',
-            'Optimized React component rendering, achieving 50% improvement in page load performance',
-            'Built scalable microservices architecture handling 1M+ API requests daily'
+            'Optimized existing experience bullet to include keywords and metrics',
+            'Rewrote summary to better align with the job requirements',
+            'Formatted skills section for better ATS readability'
         ]
     };
 
-    console.log('✅ MOCK Analysis complete');
-    console.log('🎯 ATS Score:', mockResult.atsScore);
+    console.log('✅ Dynamic Analysis complete');
+    console.log('🎯 Calculated ATS Score:', dynamicResult.atsScore);
 
-    return {
+    const finalResponse = {
         success: true,
-        ...mockResult,
+        ...dynamicResult,
         metadata: {
             userId,
             resumeId: resumeId || null,
             analyzedAt: new Date().toISOString(),
-            model: 'mock-testing-mode',
-            note: '⚠️ This is MOCK data for testing. Replace with real OpenAI integration.'
+            model: 'dynamic-heuristic-engine',
+            note: '🚀 This score is dynamically calculated based on keyword density and section analysis.'
         }
     };
+
+    // ============================================
+    // 5. PERSIST TO FIRESTORE
+    // ============================================
+    try {
+        console.log('💾 Saving analysis to Firestore...');
+
+        // Use the resume name from the first line of the text if possible
+        let resumeName = resumeText.split('\n')[0].trim().substring(0, 50) || 'Resume';
+
+        // If this is a re-analysis (resumeId exists), mark it as an edited version
+        if (resumeId) {
+            resumeName = `${resumeName} (Edited)`;
+        }
+
+        const analysisData = {
+            userId,
+            resumeName,
+            jobTitle: jdWords[0] ? jdWords[0].charAt(0).toUpperCase() + jdWords[0].slice(1) : 'Target Role',
+            company: 'Target Company',
+            atsScore: dynamicResult.atsScore,
+            result: dynamicResult,
+            createdAt: FieldValue.serverTimestamp(),
+            updatedAt: FieldValue.serverTimestamp(),
+            metadata: finalResponse.metadata,
+            isReAnalysis: !!resumeId,
+            originalResumeId: resumeId || null
+        };
+
+        const docRef = await db.collection('analyses').add(analysisData);
+        console.log('✅ Analysis saved with ID:', docRef.id);
+
+        // Include the ID in the response
+        finalResponse.analysisId = docRef.id;
+    } catch (saveError) {
+        console.error('❌ Error saving to Firestore:', saveError);
+        // We still return the result even if save fails, but log it
+    }
+
+    return finalResponse;
 }
 
 // ============================================
