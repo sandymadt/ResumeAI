@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@inquirer/ansi": "^2.0.3",
     "firebase-tools": "^15.5.1"
   }
 }
