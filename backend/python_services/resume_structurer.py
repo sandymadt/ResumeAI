@@ -259,7 +259,10 @@ class ResumeStructurer:
         # Check each section pattern
         for section_name, patterns in self.SECTION_PATTERNS.items():
             for pattern in patterns:
-                if line_lower == pattern or line_lower.startswith(pattern):
+                # Strict match only (with optional trailing punctuation already stripped)
+                # to avoid false positives such as:
+                # "Experienced engineer" being misclassified as "experience" header.
+                if line_lower == pattern:
                     return section_name
         
         return None
@@ -325,7 +328,7 @@ class ResumeStructurer:
         
         # Extract phone (various formats)
         phone_patterns = [
-            r'\+?\d{1,3}[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}',  # US format
+            r'(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}',  # US format (optional country code)
             r'\+?\d{10,}',  # Simple long number
             r'\(\d{3}\)\s*\d{3}-\d{4}'  # (123) 456-7890
         ]
@@ -420,17 +423,22 @@ class ResumeStructurer:
                     if any(c.isalnum() for c in skill):
                         skills.add(skill)
         
-        # Approach 3: Use spaCy noun chunks (if available)
+        # Approach 3: Use spaCy noun chunks (if parser is available)
         if hasattr(doc, 'noun_chunks'):
             skill_doc = self.nlp(section_text)
-            for chunk in skill_doc.noun_chunks:
-                chunk_text = chunk.text.strip()
-                # Filter reasonable length chunks
-                if 2 <= len(chunk_text) <= 30 and len(chunk_text.split()) <= 3:
-                    # Check if looks like a skill (contains tech keyword or is capitalized)
-                    if (any(word.lower() in text_lower for word in chunk_text.split()) or
-                        chunk_text[0].isupper()):
-                        skills.add(chunk_text)
+            try:
+                for chunk in skill_doc.noun_chunks:
+                    chunk_text = chunk.text.strip()
+                    # Filter reasonable length chunks
+                    if 2 <= len(chunk_text) <= 30 and len(chunk_text.split()) <= 3:
+                        # Check if looks like a skill (contains tech keyword or is capitalized)
+                        if (any(word.lower() in text_lower for word in chunk_text.split()) or
+                            chunk_text[0].isupper()):
+                            skills.add(chunk_text)
+            except ValueError:
+                # Happens with blank spaCy pipelines (no dependency parser loaded).
+                # In that case we gracefully skip noun_chunk-based extraction.
+                pass
         
         # Clean and deduplicate
         cleaned_skills = []
@@ -586,9 +594,7 @@ class ResumeStructurer:
         
         # Split into entries
         entries = section_text.split('\n\n')
-        if len(entries) == 1:
-            # Try splitting by newlines if no double newlines
-            entries = [e for e in section_text.split('\n') if e.strip()]
+        entries = [e for e in entries if e.strip()]
         
         for entry in entries:
             entry = entry.strip()

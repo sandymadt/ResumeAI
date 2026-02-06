@@ -1,0 +1,87 @@
+[debug] [2026-02-06T05:45:48.472Z] ----------------------------------------------------------------------
+[debug] [2026-02-06T05:45:48.479Z] Command:       C:\Program Files\nodejs\node.exe G:\projects\resume_analyzer\backend\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions --project resumeready-9edd6 --config backend/firebase.local.json
+[debug] [2026-02-06T05:45:48.479Z] CLI Version:   15.5.1
+[debug] [2026-02-06T05:45:48.480Z] Platform:      win32
+[debug] [2026-02-06T05:45:48.480Z] Node Version:  v24.11.1
+[debug] [2026-02-06T05:45:48.480Z] Time:          Fri Feb 06 2026 11:15:48 GMT+0530 (India Standard Time)
+[debug] [2026-02-06T05:45:48.481Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-06T05:45:57.335Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-02-06T05:45:57.336Z] > authorizing via signed-in user (dhanu991698@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[warn] !  hub: emulator hub unable to start on port 4400, starting on 4401 instead. {"metadata":{"emulator":{"name":"hub"},"message":"emulator hub unable to start on port 4400, starting on 4401 instead."}}
+[warn] !  logging: Logging Emulator unable to start on port 4500, starting on 4501 instead. {"metadata":{"emulator":{"name":"logging"},"message":"Logging Emulator unable to start on port 4500, starting on 4501 instead."}}
+[debug] [2026-02-06T05:45:57.530Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-06T05:45:57.530Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4401},{"address":"::1","family":"IPv6","port":4401}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4501}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-02-06T05:45:57.576Z] Found emulator hub locator: {"version":"15.5.1","origins":["http://127.0.0.1:4400","http://[::1]:4400"],"pid":9312}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project resumeready-9edd6. This may result in unexpected behavior. 
+[debug] [2026-02-06T05:45:57.732Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] !  eventarc: Eventarc Emulator unable to start on port 9299, starting on 9300 instead. {"metadata":{"emulator":{"name":"eventarc"},"message":"Eventarc Emulator unable to start on port 9299, starting on 9300 instead."}}
+[debug] [2026-02-06T05:45:57.828Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] !  tasks: Cloud Tasks Emulator unable to start on port 9499, starting on 9500 instead. {"metadata":{"emulator":{"name":"tasks"},"message":"Cloud Tasks Emulator unable to start on port 9499, starting on 9500 instead."}}
+[debug] [2026-02-06T05:45:57.878Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-06T05:45:57.879Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4401},{"address":"::1","family":"IPv6","port":4401}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4501}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5005}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9300}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9500}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2026-02-06T05:45:58.162Z] defaultcredentials: writing to file C:\Users\Admin\AppData\Roaming\firebase\dhanu991698_gmail_com_application_default_credentials.json
+[debug] [2026-02-06T05:45:58.254Z] Setting GAC to C:\Users\Admin\AppData\Roaming\firebase\dhanu991698_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Admin\\AppData\\Roaming\\firebase\\dhanu991698_gmail_com_application_default_credentials.json"}}
+[debug] [2026-02-06T05:45:58.256Z] Checked if tokens are valid: true, expires at: 1770358878004
+[debug] [2026-02-06T05:45:58.257Z] Checked if tokens are valid: true, expires at: 1770358878004
+[debug] [2026-02-06T05:45:58.260Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/resumeready-9edd6/adminSdkConfig [none]
+[debug] [2026-02-06T05:45:59.079Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/resumeready-9edd6/adminSdkConfig 200
+[debug] [2026-02-06T05:45:59.079Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/resumeready-9edd6/adminSdkConfig {"projectId":"resumeready-9edd6","storageBucket":"resumeready-9edd6.firebasestorage.app"}
+[warn] !  emulators: The Emulator UI is not starting because none of the running emulators have a UI component. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting because none of the running emulators have a UI component."}}
+[info] i  functions: Watching "G:\projects\resume_analyzer\backend\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"G:\\projects\\resume_analyzer\\backend\\functions\" for Cloud Functions..."}}
+[debug] [2026-02-06T05:45:59.198Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2026-02-06T05:46:03.816Z] > [functions] package.json contents: {
+  "name": "resume-analyzer-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions for AI Resume Analyzer - Production Ready",
+  "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.5.0",
+    "openai": "^4.24.1"
+  },
+  "private": true
+}
+[debug] [2026-02-06T05:46:03.816Z] Building nodejs source
+[debug] [2026-02-06T05:46:03.817Z] Failed to find version of module node: reached end of search path G:\projects\resume_analyzer\backend\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2026-02-06T05:46:03.826Z] Could not find functions.yaml. Must use http discovery
+[debug] [2026-02-06T05:46:03.844Z] Found firebase-functions binary at 'G:\projects\resume_analyzer\backend\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8452
+
+[info] ✅ Firebase Cloud Functions initialized
+
+[info] 📦 Exported functions: analyzeResume
+
+[debug] [2026-02-06T05:46:05.747Z] Got response from /__/functions.yaml {"endpoints":{"analyzeResume":{"availableMemoryMb":512,"timeoutSeconds":300,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"analyzeResume"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: analyzeResume. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: analyzeResume."}}
+[info] +  functions[us-central1-analyzeResume]: http function initialized (http://127.0.0.1:5005/resumeready-9edd6/us-central1/analyzeResume). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5005/resumeready-9edd6/us-central1/analyzeResume)."}}
+[debug] [2026-02-06T05:46:09.820Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┐
+│ Emulator  │ Host:Port      │
+├───────────┼────────────────┤
+│ Functions │ 127.0.0.1:5005 │
+└───────────┴────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4401
+  Other reserved ports: 4501
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

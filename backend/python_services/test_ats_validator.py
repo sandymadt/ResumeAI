@@ -12,6 +12,7 @@ Comprehensive tests covering:
 """
 
 import unittest
+import copy
 from ats_validator import ATSValidator, validate_resume
 
 
@@ -173,8 +174,8 @@ class TestATSValidator(unittest.TestCase):
     
     def test_linkedin_bonus(self):
         """Test bonus for including LinkedIn"""
-        with_linkedin = self.perfect_resume.copy()
-        without_linkedin = self.perfect_resume.copy()
+        with_linkedin = copy.deepcopy(self.perfect_resume)
+        without_linkedin = copy.deepcopy(self.perfect_resume)
         del without_linkedin['contact']['linkedin']
         
         result_with = self.validator.validate(with_linkedin)
